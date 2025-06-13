@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # Aplikasi Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel
+
+  # Web Server Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80" # Map port 8000 di host ke port 80 di container
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel
+
+  # Database MySQL
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_USER: ${DB_USERNAME:-user}
+    volumes:
+      - ./docker/dbdata:/var/lib/mysql
+    networks:
+      - laravel
+    ports:
+      - "3306:3306"
+
+networks:
+  laravel:
+    driver: bridge
