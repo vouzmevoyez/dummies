@@ -20,7 +20,7 @@ services:
     container_name: laravel_nginx
     restart: unless-stopped
     ports:
-      - "8000:80" # Map port 8000 di host ke port 80 di container
+      - "8080:80" # Map port 8000 di host ke port 80 di container
     volumes:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
