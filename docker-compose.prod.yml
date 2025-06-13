@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   # Aplikasi Laravel
@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - ./:/var/www
+      - ./dummies/:/var/www  # <-- PERUBAHAN DI SINI: menunjuk ke sub-folder "dummies"
     networks:
       - laravel
 
@@ -20,9 +20,9 @@ services:
     container_name: laravel_nginx
     restart: unless-stopped
     ports:
-      - "8080:80" # Map port 8000 di host ke port 80 di container
+      - "8000:80"
     volumes:
-      - ./:/var/www
+      - ./dummies/:/var/www      # <-- PERUBAHAN DI SINI: menunjuk ke sub-folder "dummies"
       - ./docker/nginx:/etc/nginx/conf.d
     networks:
       - laravel
